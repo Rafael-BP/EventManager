@@ -47,8 +47,12 @@ class EventManager implements EventManagerInterface
                     $key = array_search($event, $this->events);
                     $this->events[$key]["actions"][] = $action;
                 } else {
-                    $this->events[]["name"] = $eventName;
-                    $this->events[]["actions"][] = $action;
+                    $this->events[] = array(
+                        "name" => $eventName,
+                        "actions" => array(
+                            0 => $action
+                        )
+                    );
                 }
                 break;
             default:
