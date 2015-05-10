@@ -7,8 +7,9 @@ interface EventManager
     /**
      * Do the dispatch of a specific event
      * @param string $eventName
+     * @param array $args
      */
-    public function dispatch($eventName);
+    public function dispatch($eventName, $args = array());
     
     /**
      * Add action (Listener or callable) for a event

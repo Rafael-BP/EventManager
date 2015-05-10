@@ -40,15 +40,45 @@ class EventManager implements EventManagerInterface
      */
     public function on($eventName, $action)
     {
-        
+        $event = $this->getEvent($eventName);
+        switch(true) {
+            case ( ($action instanceof callable) || ($action instanceof Listener) ):
+                if (!empty($event)) {
+                    $key = array_search($event, $this->events);
+                    $this->events[$key]["actions"][] = $action;
+                } else {
+                    $this->events[]["name"] = $eventName;
+                    $this->events[]["actions"][] = $action;
+                }
+                break;
+            default:
+                throw new \InvalidArgumentException("Invalid type of action provided for event manager", 400);
+        }
     }
     
     /**
      * Dispatch event
      * @param string $eventName
+     * @param array $args Optional args for event actions
      */
-    public function dispatch($eventName)
+    public function dispatch($eventName, $args = array())
     {
+       $event = $this->getEvent($eventName);
+       if (!empty($event)) {
+           $key = array_search($event, $this->events);
+           foreach ($this->events[$key]["actions"] as $action) {
+               switch (true) {
+                    case $action instanceof callable:
+                        call_user_func_array($action, $args);
+                        break;
+                    case $action instanceof Listener:
+                        $action->update($args);
+                        break;
+                    default:
+                        throw new \InvalidArgumentException("Invalid type of action provided on event manager", 400); 
+               }               
+           }
+       }
         
     }
     
