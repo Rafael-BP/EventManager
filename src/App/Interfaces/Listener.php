@@ -1,13 +1,15 @@
 <?php
 
-namespace App;
+namespace App\Interfaces;
 
-use App\Interfaces\Listener as ListenerInterface;
-
-class Listener implements ListenerInterface
+interface Listener
 {
     
-    abstract function update();
+    /**
+     * Update listener, can recevei optional args array
+     * @param array $args
+     */
+    function update($args = array());
     
 }
 

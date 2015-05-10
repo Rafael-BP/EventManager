@@ -2,15 +2,26 @@
 
 namespace App;
 
-use App\Interfaces\Event;
-use App\Interfaces\Manager;
+use App\Interfaces\EventManager as EventManagerInterface;
 use App\Interfaces\Listener;
 
-class EventManager implements Event, Manager
+class EventManager implements EventManagerInterface
 {    
     /*
      * This is the events array
      * @var array
+     * @example
+     * array(
+     *     0 => array(
+     *         "name" => "eventName",
+     *         "actions" => array(
+     *             0 => callable,
+     *             1 => concreteListener
+     *             ...
+     *         )
+     *     )
+     *     ...
+     * )
      */
     private $events;
     
@@ -19,33 +30,13 @@ class EventManager implements Event, Manager
      */
     public function __construct()
     {
-        $events = array();
-    }
-    
-    /**
-     * Add Listener to Event Name
-     * @param string $eventName
-     * @param \App\Interfaces\Listener $listener
-     */
-    private function addListener($eventName, Listener $listener)
-    {    
-       
-    }
-    
-    /**
-     * Remove Listener from Event Name
-     * @param string $eventName
-     * @param \App\Interfaces\Listener $listener
-     */
-    private function removeListener($eventName, Listener $listener)
-    {    
-       
+        $this->events = array();
     }
     
     /**
      * Add a callable or listener to a new or existent event name
      * @param string $eventName
-     * @param Listener|function $action
+     * @param \App\Interfaces\Listener|callable $action
      */
     public function on($eventName, $action)
     {
@@ -59,6 +50,34 @@ class EventManager implements Event, Manager
     public function dispatch($eventName)
     {
         
+    }
+    
+    /**
+     * Return events array
+     * @return array
+     */
+    public function getEvents()
+    {    
+       return $this->events;
+    }
+    
+    /**
+     * Search and return event from the events array
+     * @param string $eventName
+     * @return array
+     */
+    public function getEvent($eventName)
+    {
+        
+    }
+    
+    /**
+     * Remove event from events array
+     * @param string $eventName
+     */
+    public function removeEvent($eventName)
+    {    
+       
     }
     
 }
