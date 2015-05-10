@@ -100,7 +100,10 @@ class EventManager implements EventManagerInterface
      */
     public function removeEvent($eventName)
     {  
-       $this->events = array_splice($this->getEvents(), $eventName, 1);
+        $events = $this->getEvents();
+        if (array_key_exists($eventName, $events)) {
+           $this->events = array_splice($events, $eventName, 1);
+        }
     }
     
 }
