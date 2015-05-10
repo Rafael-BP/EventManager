@@ -12,15 +12,12 @@ class EventManager implements EventManagerInterface
      * @var array
      * @example
      * array(
-     *     0 => array(
-     *         "name" => "eventName",
-     *         "actions" => array(
-     *             0 => callable,
-     *             1 => concreteListener
-     *             ...
-     *         )
+     *     "EventName1" => array(
+     *         0 => callable,
+     *         1 => concreteListener
+     *         ...
      *     )
-     *     ...
+     *     ....
      * )
      */
     private $events;
@@ -40,20 +37,9 @@ class EventManager implements EventManagerInterface
      */
     public function on($eventName, $action)
     {
-        $event = $this->getEvent($eventName);
         switch(true) {
             case ( ($action instanceof callable) || ($action instanceof Listener) ):
-                if (!empty($event)) {
-                    $key = array_search($event, $this->events);
-                    $this->events[$key]["actions"][] = $action;
-                } else {
-                    $this->events[] = array(
-                        "name" => $eventName,
-                        "actions" => array(
-                            0 => $action
-                        )
-                    );
-                }
+                $this->events[$eventName][] = $action;
                 break;
             default:
                 throw new \InvalidArgumentException("Invalid type of action provided for event manager", 400);
@@ -67,10 +53,9 @@ class EventManager implements EventManagerInterface
      */
     public function dispatch($eventName, $args = array())
     {
-       $event = $this->getEvent($eventName);
-       if (!empty($event)) {
-           $key = array_search($event, $this->events);
-           foreach ($this->events[$key]["actions"] as $action) {
+       $events = $this->getEvents();
+       if (array_key_exists($eventName, $events)) {
+           foreach ($events[$eventName] as $action) {
                switch (true) {
                     case $action instanceof callable:
                         call_user_func_array($action, $args);
@@ -102,13 +87,11 @@ class EventManager implements EventManagerInterface
      */
     public function getEvent($eventName)
     {
-        $result = array();
-        foreach ($this->getEvents() as $event) {
-            if ($event['name'] == $eventName) {
-                $result = $event;
-            }
+        $events = $this->getEvents();
+        if (array_key_exists($eventName, $events)) {
+            return $events[$eventName];
         }
-        return $result;
+        return array();
     }
     
     /**
@@ -117,10 +100,7 @@ class EventManager implements EventManagerInterface
      */
     public function removeEvent($eventName)
     {  
-       $events =  $this->events;
-       $event = $this->getEvent($eventName); 
-       $key = array_search($event, $events);
-       $this->events = array_splice($events, $key, 1);
+       $this->events = array_splice($this->getEvents(), $eventName, 1);
     }
     
 }
