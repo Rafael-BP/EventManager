@@ -68,7 +68,13 @@ class EventManager implements EventManagerInterface
      */
     public function getEvent($eventName)
     {
-        
+        $result = array();
+        foreach ($this->getEvents() as $event) {
+            if ($event['name'] == $eventName) {
+                $result = $event;
+            }
+        }
+        return $result;
     }
     
     /**
@@ -76,8 +82,11 @@ class EventManager implements EventManagerInterface
      * @param string $eventName
      */
     public function removeEvent($eventName)
-    {    
-       
+    {  
+       $events =  $this->events;
+       $event = $this->getEvent($eventName); 
+       $key = array_search($event, $events);
+       $this->events = array_splice($events, $key, 1);
     }
     
 }
