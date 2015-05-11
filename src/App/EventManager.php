@@ -91,7 +91,7 @@ class EventManager implements EventManagerInterface
         if (array_key_exists($eventName, $events)) {
             return $events[$eventName];
         }
-        return array();
+        return null;
     }
     
     /**
