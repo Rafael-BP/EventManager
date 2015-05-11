@@ -50,6 +50,10 @@ class EventManager implements EventManagerInterface
      * Dispatch event
      * @param string $eventName
      * @param array $args Optional args for event actions
+     * If you event have more than one action, unless all the actions dont have
+     * any args, the args array need to be a array of arrays, each index of the
+     * args array need to corresponds to the index of the action in the event 
+     * array to work properly. 
      */
     public function dispatch($eventName, $args = array())
     {
@@ -59,14 +63,14 @@ class EventManager implements EventManagerInterface
             foreach ($events[$eventName] as $action) {
                 switch (true) {
                     case $action instanceof callable:
-                        if ( count($events[$eventName]) > 1) {
+                        if ( (count($events[$eventName]) > 1) && !empty($args) ) {
                             call_user_func_array($action, $args[$argsIndex]);
                         } else {
                             call_user_func_array($action, $args);
                         }
                         break;
                     case $action instanceof Listener:
-                        if ( count($events[$eventName]) > 1) {
+                        if ( (count($events[$eventName]) > 1) && !empty($args) ) {
                             $action->update($args[$argsIndex]);
                         } else {
                             $action->update($args);
