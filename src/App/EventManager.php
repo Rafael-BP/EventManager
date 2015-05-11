@@ -17,7 +17,7 @@ class EventManager implements EventManagerInterface
      *         1 => concreteListener
      *         ...
      *     )
-     *     ....
+     *     ...
      * )
      */
     private $events;
@@ -31,7 +31,7 @@ class EventManager implements EventManagerInterface
     }
     
     /**
-     * Add a callable or listener to a new or existent event name
+     * Add a callable or listener to a new or existent event
      * @param string $eventName
      * @param \App\Interfaces\Listener|callable $action
      */
@@ -91,7 +91,7 @@ class EventManager implements EventManagerInterface
         if (array_key_exists($eventName, $events)) {
             return $events[$eventName];
         }
-        return array();
+        return null;
     }
     
     /**
