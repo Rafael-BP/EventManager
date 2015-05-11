@@ -53,22 +53,32 @@ class EventManager implements EventManagerInterface
      */
     public function dispatch($eventName, $args = array())
     {
-       $events = $this->getEvents();
-       if (array_key_exists($eventName, $events)) {
-           foreach ($events[$eventName] as $action) {
-               switch (true) {
+        $events = $this->getEvents();
+        if (array_key_exists($eventName, $events)) {
+            $argsIndex = 0;
+            foreach ($events[$eventName] as $action) {
+                switch (true) {
                     case $action instanceof callable:
-                        call_user_func_array($action, $args);
+                        if ( count($events[$eventName]) > 1) {
+                            call_user_func_array($action, $args[$argsIndex]);
+                        } else {
+                            call_user_func_array($action, $args);
+                        }
                         break;
                     case $action instanceof Listener:
-                        $action->update($args);
+                        if ( count($events[$eventName]) > 1) {
+                            $action->update($args[$argsIndex]);
+                        } else {
+                            $action->update($args);
+                        }
                         break;
                     default:
                         throw new \InvalidArgumentException("Invalid type of action provided on event manager", 400); 
-               }               
-           }
-       }
-        
+                }
+                $argsIndex++;
+            }
+        }
+
     }
     
     /**
