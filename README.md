@@ -1,6 +1,6 @@
 # Event Manager
 ![A simple event manager structure]
-(http://i61.tinypic.com/55pldv.png)
+(http://i58.tinypic.com/2lke9w8.png)
 
 ### Description ###
 This project have a PHP implementation of Event Manager structure as showed in the picture above. The objective of this structure is to be easy to use and have low burocracy.
