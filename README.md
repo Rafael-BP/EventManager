@@ -1,9 +1,9 @@
-# EventManager
+# Event Manager
 ![A simple event manager structure]
 (http://i61.tinypic.com/55pldv.png)
 
 ### Description ###
-This project have an Event Manager structure as showed in the picture above. The objective of this structure is to be easy to use and have low burocracy.
+This project have a PHP implementation of Event Manager structure as showed in the picture above. The objective of this structure is to be easy to use and have low burocracy.
 <br/>
 You can create Events with the EventManager class, and assign actions to these events, these actions can be a callable or a class that implements the Listener interface (a concrete listener).
 <br/>
