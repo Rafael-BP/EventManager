@@ -16,7 +16,7 @@ interface EventManager
     /**
      * Add action (Listener or callable) for a event
      * @param string $eventName
-     * @param \App\Interfaces\Listener|callable $action
+     * @param \App\Interfaces\Listener|\callable $action
      */
     public function on($eventName, $action);
     

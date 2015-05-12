@@ -33,13 +33,13 @@ class EventManager implements EventManagerInterface
     /**
      * Add a callable or listener to a new or existent event
      * @param string $eventName The event to attach the listener
-     * @param \App\Interfaces\Listener|callable $action The event listener callback
+     * @param \App\Interfaces\Listener|\callable $action The event listener callback
      * @return void
      */
     public function on($eventName, $action)
     {
         switch (true) {
-        case ( ($action instanceof callable) || ($action instanceof Listener) ):
+        case (((is_callable($action))) || ($action instanceof Listener)):
 
             // The block below you can use for control or remove it
             $events = $this->getEvents();
@@ -75,7 +75,7 @@ class EventManager implements EventManagerInterface
             $argsIndex = 0;
             foreach ($events[$eventName] as $action) {
                 switch (true) {
-                case $action instanceof callable:
+                case is_callable($action):
                     if ( (count($events[$eventName]) > 1) && !empty($args) ) {
                         call_user_func_array($action, $args[$argsIndex]);
                     } else {
