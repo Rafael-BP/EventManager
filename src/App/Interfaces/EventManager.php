@@ -8,6 +8,8 @@ interface EventManager
      * Do the dispatch of a specific event
      * @param string $eventName
      * @param array $args
+     *
+     * @return void
      */
     public function dispatch($eventName, $args = array());
     
