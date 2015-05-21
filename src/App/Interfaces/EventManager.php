@@ -8,13 +8,15 @@ interface EventManager
      * Do the dispatch of a specific event
      * @param string $eventName
      * @param array $args
+     *
+     * @return void
      */
     public function dispatch($eventName, $args = array());
     
     /**
      * Add action (Listener or callable) for a event
      * @param string $eventName
-     * @param \App\Interfaces\Listener|callable $action
+     * @param \App\Interfaces\Listener|\callable $action
      */
     public function on($eventName, $action);
     

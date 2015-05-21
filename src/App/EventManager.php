@@ -32,8 +32,9 @@ class EventManager implements EventManagerInterface
 
     /**
      * Add a callable or listener to a new or existent event
-     * @param string $eventName
-     * @param \App\Interfaces\Listener|callable $action
+     * @param string $eventName The event to attach the listener
+     * @param \App\Interfaces\Listener|\callable $action The event listener callback
+     * @return void
      */
     public function on($eventName, $action)
     {
@@ -53,12 +54,16 @@ class EventManager implements EventManagerInterface
 
     /**
      * Dispatch event
-     * @param string $eventName
-     * @param array $args Optional args for event actions
-     * If you event have more than one action, unless all the actions dont have
+     *
+     * If your event have more than one action, unless all the actions doesn't have
      * any args, the args array need to be a array of arrays, each index of the
-     * args array need to corresponds to the index of the action in the event
+     * args array needs to correspond to the index of the actions in the event
      * array to work properly.
+     *
+     * @param string $eventName The event to be dispatched
+     * @param array $args Optional args for event actions
+     *
+     * @return void
      */
     public function dispatch($eventName, $args = array())
     {
@@ -67,22 +72,23 @@ class EventManager implements EventManagerInterface
             $argsIndex = 0;
             foreach ($events[$eventName] as $action) {
                 switch (true) {
-                    case $action instanceof callable:
-                        if ( (count($events[$eventName]) > 1) && !empty($args) ) {
-                            call_user_func_array($action, $args[$argsIndex]);
-                        } else {
-                            call_user_func_array($action, $args);
-                        }
-                        break;
-                    case $action instanceof Listener:
-                        if ( (count($events[$eventName]) > 1) && !empty($args) ) {
-                            $action->update($args[$argsIndex]);
-                        } else {
-                            $action->update($args);
-                        }
-                        break;
-                    default:
-                        throw new \InvalidArgumentException("Invalid type of action provided on event manager", 400); 
+                case is_callable($action):
+                    if ( (count($events[$eventName]) > 1) && !empty($args) ) {
+                        call_user_func_array($action, $args[$argsIndex]);
+                    } else {
+                        call_user_func_array($action, $args);
+                    }
+                    break;
+                case $action instanceof Listener:
+                    if ( (count($events[$eventName]) > 1) && !empty($args) ) {
+                        $action->update($args[$argsIndex]);
+                    } else {
+                        $action->update($args);
+                    }
+                    break;
+                default:
+                    $message = 'Invalid type of action provided on event manager';
+                    throw new \InvalidArgumentException($message, 400); 
                 }
                 $argsIndex++;
             }
@@ -96,12 +102,12 @@ class EventManager implements EventManagerInterface
      */
     public function getEvents()
     {
-       return $this->events;
+        return $this->events;
     }
 
     /**
      * Search and return event from the events array
-     * @param string $eventName
+     * @param string $eventName the event name
      * @return array
      */
     public function getEvent($eventName)
@@ -115,13 +121,14 @@ class EventManager implements EventManagerInterface
 
     /**
      * Remove event from events array
-     * @param string $eventName
+     * @param string $eventName The event to be removed
+     * @return void
      */
     public function removeEvent($eventName)
     {
         $events = $this->getEvents();
         if (array_key_exists($eventName, $events)) {
-           $this->events = array_splice($events, $eventName, 1);
+            $this->events = array_splice($events, $eventName, 1);
         }
     }
 
