@@ -37,20 +37,18 @@ class EventManager implements EventManagerInterface
      */
     public function on($eventName, $action)
     {
-        switch(true) {
-	    case ( ($action instanceof callable) || ($action instanceof Listener) ):
-
-                // The block below you can use for control or remove it
-	        $events = $this->getEvents();
-	        if (array_key_exists("attach", $events)) {
-	            $this->dispatch("attach", array($eventName, $action));
-	        }
-
-                $this->events[$eventName][] = $action;
-                break;
-            default:
-                throw new \InvalidArgumentException("Invalid type of action provided for event manager", 400);
+        if (!(is_callable($action)) || !($action instanceof Listener)) {
+            $message = 'Invalid type of action provided for event manager';
+            throw new \InvalidArgumentException($message, 400);
         }
+
+        // The block below you can use for control or remove it
+        $events = $this->getEvents();
+        if (array_key_exists("attach", $events)) {
+            $this->dispatch("attach", array($eventName, $action));
+        }
+
+        $this->events[$eventName][] = $action;
     }
 
     /**
