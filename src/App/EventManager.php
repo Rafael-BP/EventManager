@@ -72,23 +72,23 @@ class EventManager implements EventManagerInterface
             $argsIndex = 0;
             foreach ($events[$eventName] as $action) {
                 switch (true) {
-                case is_callable($action):
-                    if ( (count($events[$eventName]) > 1) && !empty($args) ) {
-                        call_user_func_array($action, $args[$argsIndex]);
-                    } else {
-                        call_user_func_array($action, $args);
-                    }
-                    break;
-                case $action instanceof Listener:
-                    if ( (count($events[$eventName]) > 1) && !empty($args) ) {
-                        $action->update($args[$argsIndex]);
-                    } else {
-                        $action->update($args);
-                    }
-                    break;
-                default:
-                    $message = 'Invalid type of action provided on event manager';
-                    throw new \InvalidArgumentException($message, 400); 
+                    case is_callable($action):
+                        if ( (count($events[$eventName]) > 1) && !empty($args) ) {
+                            call_user_func_array($action, $args[$argsIndex]);
+                        } else {
+                            call_user_func_array($action, $args);
+                        }
+                        break;
+                    case $action instanceof Listener:
+                        if ( (count($events[$eventName]) > 1) && !empty($args) ) {
+                            $action->update($args[$argsIndex]);
+                        } else {
+                            $action->update($args);
+                        }
+                        break;
+                    default:
+                        $message = 'Invalid type of action provided on event manager';
+                        throw new \InvalidArgumentException($message, 400); 
                 }
                 $argsIndex++;
             }
