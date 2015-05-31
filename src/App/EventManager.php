@@ -93,7 +93,6 @@ class EventManager implements EventManagerInterface
                 $argsIndex++;
             }
         }
-
     }
 
     /**
