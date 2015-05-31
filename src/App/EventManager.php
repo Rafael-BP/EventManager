@@ -131,6 +131,4 @@ class EventManager implements EventManagerInterface
             $this->events = array_splice($events, $eventName, 1);
         }
     }
-
 }
-
